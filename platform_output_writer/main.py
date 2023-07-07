@@ -8,7 +8,7 @@ PLATFORM_CONTROLLER_PYNNG_ADDRESS = "ipc:///tmp/RAAI/driver_input_reader.ipc"
 CONTROL_PANEL_PYNNG_ADDRESS = "ipc:///tmp/RAAI/control_panel.ipc"
 
 
-def receive_data(sub: pynng.Sub0) -> dict:
+def receive_data(sub: pynng.Sub0) -> str:
     """
     receives data via pynng and returns a variable that stores the content
 
@@ -95,6 +95,6 @@ class PlatformWriter:
     def run(self):
         """Main Function. Run in a Loop"""
         self.receive_socket_data()
-        self.process_platform_data()
+        # self.process_platform_data()
         # print(self.panel_config)
 

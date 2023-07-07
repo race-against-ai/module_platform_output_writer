@@ -21,11 +21,11 @@ class DynamicsPlatform:
 
         # front-back lean amount
         if brake_percent == 0 and throttle_percent == 0:
-            fb_lean = 0
+            fb_lean: float = 0.0
         elif throttle_percent > brake_percent:
-            fb_lean = 1.75 * throttle_percent / 100
+            fb_lean: float = 1.75 * throttle_percent / 100
         else:
-            fb_lean = -1.75 * brake_percent / 100
+            fb_lean: float = -1.75 * brake_percent / 100
 
         # sideways lean
         lr_lean = 1.5 * steering_percent / 100
