@@ -1,5 +1,9 @@
 # Copyright (C) 2022 NG:ITL
-# import the main file in the backend folder
+from platform_output_writer.main import PlatformWriter
 
 if __name__ == "__main__":
-    print("enter you projects main function :)")
+    print("initializing Platform Socket")
+    platform_writer = PlatformWriter()
+    print("Starting Loop")
+    while True:
+        platform_writer.run()
