@@ -79,6 +79,11 @@ class PlatformWriter:
         self.panel_config = self.fd_dict[self.control_panel_receiver.recv_fd][1]
 
     def process_platform_data(self) -> None:
+        throttle = self.driver_input["throttle"]
+        brake = self.driver_input["brake"]
+        clutch = self.driver_input["clutch"]
+        steering = self.driver_input["steering"]
+
         tilt_x = self.driver_input["tilt_x"]
         tilt_y = self.driver_input["tilt_y"]
         rpm = self.driver_input["vibration"]
@@ -86,13 +91,20 @@ class PlatformWriter:
         platform_status = self.panel_config["platform_status"]
 
         if platform_status:
-            self.dynamics_platform.send_to_platform(acc_x=tilt_x, acc_y=tilt_y, rpm=rpm)
+            # disabled because the tilt was erratic and wayyy too much
+            # self.dynamics_platform.send_to_platform(acc_x=tilt_x, acc_y=tilt_y, rpm=rpm)
+            self.dynamics_platform.update(throttle_percent=throttle,
+                                          brake_percent=brake,
+                                          steering_percent=steering,
+                                          force_none_rmp=False
+                                          )
 
         else:
-            self.dynamics_platform.send_to_platform(acc_x=0.0, acc_y=0.0, rpm=0)
+            # self.dynamics_platform.send_to_platform(acc_x=0.0, acc_y=0.0, rpm=0)
+            self.dynamics_platform.update(0, 0, 0, True)
 
     def run(self):
         """Main Function. Run in a Loop"""
         self.receive_socket_data()
-        # self.process_platform_data()
+        self.process_platform_data()
         # print(self.panel_config)

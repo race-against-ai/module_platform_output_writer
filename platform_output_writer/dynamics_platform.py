@@ -29,7 +29,7 @@ class DynamicsPlatform:
             fb_lean = -1.75 * brake_percent / 100
 
         # sideways lean
-        lr_lean = 1.5 * steering_percent / 100
+        lr_lean = -1.5 * steering_percent / 100
 
         # acc_z is not used, as it is not needed
         self.send_to_platform(rpm=vibration_amount, acc_y=fb_lean, acc_x=lr_lean)
