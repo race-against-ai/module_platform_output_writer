@@ -30,12 +30,11 @@ def remove_pynng_topic(data, sign: str = " ") -> str:
     """
     decoded_data: str = data.decode()
     i = decoded_data.find(sign)
-    decoded_data = decoded_data[i + 1:]
+    decoded_data = decoded_data[i + 1 :]
     return decoded_data
 
 
 class PlatformWriter:
-
     def __init__(self) -> None:
         # Setting up the Platform
         self.dynamics_platform = DynamicsPlatform()
@@ -51,13 +50,13 @@ class PlatformWriter:
 
         # initializing the dictionaries with expected values
         self.driver_input = {
-            'throttle': 0.0,
-            'brake': 0.0,
-            'clutch': 0.0,
-            'steering': 0.0,
-            'tilt_x': 0.0,
-            'tilt_y': 0.0,
-            'vibration': 0.0
+            "throttle": 0.0,
+            "brake": 0.0,
+            "clutch": 0.0,
+            "steering": 0.0,
+            "tilt_x": 0.0,
+            "tilt_y": 0.0,
+            "vibration": 0.0,
         }
 
         self.panel_config = {"platform_status": True}
@@ -65,7 +64,7 @@ class PlatformWriter:
         self.inputs = [self.driver_input_receiver.recv_fd, self.control_panel_receiver.recv_fd]
         self.fd_dict = {
             self.driver_input_receiver.recv_fd: [self.driver_input_receiver, self.driver_input],
-            self.control_panel_receiver.recv_fd: [self.control_panel_receiver, self.panel_config]
+            self.control_panel_receiver.recv_fd: [self.control_panel_receiver, self.panel_config],
         }
 
     def receive_socket_data(self) -> None:
@@ -87,7 +86,7 @@ class PlatformWriter:
         platform_status = self.panel_config["platform_status"]
 
         if platform_status:
-            self.dynamics_platform.send_to_platform(acc_x= tilt_x, acc_y=tilt_y, rpm=rpm)
+            self.dynamics_platform.send_to_platform(acc_x=tilt_x, acc_y=tilt_y, rpm=rpm)
 
         else:
             self.dynamics_platform.send_to_platform(acc_x=0.0, acc_y=0.0, rpm=0)
@@ -97,4 +96,3 @@ class PlatformWriter:
         self.receive_socket_data()
         # self.process_platform_data()
         # print(self.panel_config)
-

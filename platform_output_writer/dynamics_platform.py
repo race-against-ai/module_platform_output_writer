@@ -2,12 +2,13 @@ import socket
 
 
 class DynamicsPlatform:
-
-    def __init__(self, destination_address='127.0.0.1', destination_port=40000):
+    def __init__(self, destination_address="127.0.0.1", destination_port=40000):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.address = (destination_address, destination_port)
 
-    def update(self, throttle_percent: float, brake_percent: float, steering_percent: float, force_none_rmp:bool = False):
+    def update(
+        self, throttle_percent: float, brake_percent: float, steering_percent: float, force_none_rmp: bool = False
+    ):
         # X: left - right       pos is right, neg is left, [-1.5; 1.5]      D: 3.0
         # Y: front - back       pos is back, neg is front  [-1.75; 1.75]    D: 3.5
         # Z: up - down          pos is up, neg is down     [-1.5; 1.5]      D: 3.0
