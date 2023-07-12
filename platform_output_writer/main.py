@@ -93,11 +93,9 @@ class PlatformWriter:
         if platform_status:
             # disabled because the tilt was erratic and wayyy too much
             # self.dynamics_platform.send_to_platform(acc_x=tilt_x, acc_y=tilt_y, rpm=rpm)
-            self.dynamics_platform.update(throttle_percent=throttle,
-                                          brake_percent=brake,
-                                          steering_percent=steering,
-                                          force_none_rmp=False
-                                          )
+            self.dynamics_platform.update(
+                throttle_percent=throttle, brake_percent=brake, steering_percent=steering, force_none_rmp=False
+            )
 
         else:
             # self.dynamics_platform.send_to_platform(acc_x=0.0, acc_y=0.0, rpm=0)
