@@ -51,14 +51,20 @@ def create_config(config_file_path: str) -> dict:
             "publishers": {
             },
             "subscribers": {
-                "__driver_input_receiver": {
+                "driver_input_receiver": {
                     "address": "ipc:///tmp/RAAI/driver_input_reader.ipc",
                     "topics": {
                         "driver_input": "driver_input"
                     }
+                },
+                "control_panel_receiver": {
+                    "address": "ipc:///tmp/RAAI/control_panel.ipc",
+                    "topics": {
+                        "platform": "platform"
+                    }
                 }
             }
-        },
+        }
     }
 
 
