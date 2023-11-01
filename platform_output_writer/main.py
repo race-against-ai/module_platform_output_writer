@@ -1,6 +1,7 @@
 import pynng
 import json
 import select
+import os
 
 from platform_output_writer.dynamics_platform import DynamicsPlatform
 
@@ -72,10 +73,12 @@ class PlatformWriter:
     def __init__(self, config_file: str = "./platform_output_writer_config.json") -> None:
         # Setting up the Platform
         self.dynamics_platform = DynamicsPlatform()
+        # print(config_file)
         self.config = read_config(config_file)
         # Setting up the pynng receiver
         input_address = self.config["pynng"]["subscribers"]["driver_input_receiver"]["address"]
         input_topic = self.config["pynng"]["subscribers"]["driver_input_receiver"]["topics"]["driver_input"]
+        # print(input_address)
         self.driver_input_receiver = pynng.Sub0()
         self.driver_input_receiver.subscribe(input_topic)
         self.driver_input_receiver.dial(input_address, block=False)
