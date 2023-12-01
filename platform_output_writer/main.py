@@ -1,6 +1,7 @@
 import pynng
 import json
 import select
+import os
 
 from platform_output_writer.dynamics_platform import DynamicsPlatform
 
@@ -34,19 +35,59 @@ def remove_pynng_topic(data, sign: str = " ") -> str:
     return decoded_data
 
 
+def read_config(config_file_path: str) -> dict:
+    if os.path.isfile(config_file_path):
+        with open(config_file_path, 'r') as file:
+            return json.load(file)
+    else:
+        return create_config(config_file_path)
+
+
+def create_config(config_file_path: str) -> dict:
+    """wrote this to ensure that a config file always exists, ports have to be adjusted if necessary"""
+    print("No Config File found, creating new one from Template")
+    print("---!Using default argments for a Config file")
+    template = {
+        "pynng": {
+            "publishers": {
+            },
+            "subscribers": {
+                "driver_input_receiver": {
+                    "address": "ipc:///tmp/RAAI/driver_input_reader.ipc",
+                    "topics": {
+                        "driver_input": "driver_input"
+                    }
+                },
+                "control_panel_receiver": {
+                    "address": "ipc:///tmp/RAAI/control_panel.ipc",
+                    "topics": {
+                        "platform": "platform"
+                    }
+                }
+            }
+        }
+    }
+
+
 class PlatformWriter:
-    def __init__(self) -> None:
+    def __init__(self, config_file: str = "./platform_output_writer_config.json") -> None:
         # Setting up the Platform
         self.dynamics_platform = DynamicsPlatform()
-
+        # print(config_file)
+        self.config = read_config(config_file)
         # Setting up the pynng receiver
+        input_address = self.config["pynng"]["subscribers"]["driver_input_receiver"]["address"]
+        input_topic = self.config["pynng"]["subscribers"]["driver_input_receiver"]["topics"]["driver_input"]
+        # print(input_address)
         self.driver_input_receiver = pynng.Sub0()
-        self.driver_input_receiver.subscribe("driver_input")
-        self.driver_input_receiver.dial(PLATFORM_CONTROLLER_PYNNG_ADDRESS, block=False)
+        self.driver_input_receiver.subscribe(input_topic)
+        self.driver_input_receiver.dial(input_address, block=False)
 
+        panel_address = self.config["pynng"]["subscribers"]["control_panel_receiver"]["address"]
+        panel_topic = self.config["pynng"]["subscribers"]["control_panel_receiver"]["topics"]["platform"]
         self.control_panel_receiver = pynng.Sub0()
-        self.control_panel_receiver.subscribe("platform")
-        self.control_panel_receiver.dial(CONTROL_PANEL_PYNNG_ADDRESS, block=False)
+        self.control_panel_receiver.subscribe(panel_topic)
+        self.control_panel_receiver.dial(panel_address, block=False)
 
         # initializing the dictionaries with expected values
         self.driver_input = {
